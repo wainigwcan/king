@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const Schema = new mongoose.Schema({
-    name: { type: String },
+    name: { type: String },//标题
     items: [{
-        image: { type: String },
-        url: { type: String }
+        url: { type: String },
+        image: { type: String }
     }]
 });
 
-module.exports = mongoose.model("Ad", Schema);
+module.exports = mongoose.model("Ad", Schema)

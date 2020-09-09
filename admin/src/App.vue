@@ -4,10 +4,18 @@
   </div>
 </template>
 
-<style>
-html,
-body {
-  margin: 0;
-  padding: 0;
+<script>
+
+export default {
+  name: 'app',
+  components: {
+  }
 }
+</script>
+
+<style>
+  html,body{
+    margin:0;
+    padding:0;
+  }
 </style>

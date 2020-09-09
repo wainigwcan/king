@@ -1,37 +1,38 @@
-import axios from 'axios'
-import Vue from "vue";
+import axios from 'axios';
+import Vue from 'vue';
 import router from './router'
 const http = axios.create({
     baseURL: "http://localhost:3000/admin/api"
 });
 
-http.interceptors.request.use(
-    //在请求之前做点什么 比如加入token
-    config => {
-        if (localStorage.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-            config.headers.Authorization = "Bearer " + localStorage.token
-        }
-        return config;
-    },
-    err => {
-        return Promise.reject(err);
-    });
+// 请求拦截
+http.interceptors.request.use(function (config) {
+    // Do something before request is sent
+    if (localStorage.token) {
+        config.headers.Authorization = 'Bearer ' + localStorage.token
+    }
+    return config;
+}, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+});
 
-http.interceptors.response.use(
-    config => {
-        return config;
-    },
-    error => {
-        if (error.response.data.message) {
+// 响应拦截
+http.interceptors.response.use(res => {  // 该处为后端返回整个内容
+    return res;
+},
+    err => {
+        if (err.response.data.message) {
             Vue.prototype.$message({
                 type: "error",
-                message: error.response.data.message
+                message: `${err.response.data.message}`
             });
         }
-        if (error.response.status) {
-            router.push("/login");
+        if (err.response.status === 401) {
+            router.push('/login')
         }
-        return Promise.error(error);
-    })
+        return Promise.reject(err)
+    }
+)
 
 export default http;
